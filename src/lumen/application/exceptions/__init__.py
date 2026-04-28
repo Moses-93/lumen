@@ -10,6 +10,17 @@ from .persistence import (
     PersistenceTimeoutError,
     PersistenceError,
 )
+from .llm import (
+    LlmConfigurationError,
+    LlmAuthenticationError,
+    LlmConnectionError,
+    LlmResponseError,
+    LlmTimeoutError,
+    LlmTokenLimitError,
+    LlmOperationalError,
+    LlmModelNotFoundError,
+    LlmError,
+)
 
 
 __all__ = [
@@ -23,4 +34,13 @@ __all__ = [
     "PersistenceReplyError",
     "PersistenceTimeoutError",
     "PersistenceError",
+    "LlmConfigurationError",
+    "LlmAuthenticationError",
+    "LlmConnectionError",
+    "LlmResponseError",
+    "LlmTimeoutError",
+    "LlmTokenLimitError",
+    "LlmOperationalError",
+    "LlmModelNotFoundError",
+    "LlmError",
 ]
