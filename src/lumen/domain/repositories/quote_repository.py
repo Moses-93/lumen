@@ -26,5 +26,7 @@ class QuoteRepository(ABC):
         pass
 
     @abstractmethod
-    def find_similar(self, embedding: list[float], limit: int = 1) -> list[Quote]:
+    def find_similar(
+        self, embedding: list[float], limit: int = 1, threshold: float = 0.28
+    ) -> list[Quote]:
         pass
