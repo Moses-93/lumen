@@ -14,6 +14,8 @@ class Settings(BaseSettings):
 
     embedding_model: str = Field(alias="EMBEDDING_MODEL")
     embedding_cache_dir: Path | None = Field(alias="EMBEDDING_CACHE_DIR", default=None)
+    embedding_batch_size: int = Field(alias="EMBEDDING_BATCH_SIZE", default=128)
+    use_gpu: bool = Field(alias="USE_GPU", default=False)
     llm_model: str = Field(alias="LLM_MODEL")
 
     postgres_user: str = Field(alias="POSTGRES_USER")
