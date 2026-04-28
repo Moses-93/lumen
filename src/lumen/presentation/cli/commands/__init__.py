@@ -1,3 +1,4 @@
 from .quote import quotes, seed
+from .note import notes
 
-commands = [quotes, seed]
+commands = [quotes, seed, notes]
