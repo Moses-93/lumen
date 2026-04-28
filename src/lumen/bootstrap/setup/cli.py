@@ -1,7 +1,7 @@
 import click
 from dishka.integrations.click import setup_dishka
 
-from lumen.bootstrap.container.main import build_container
+from lumen.bootstrap.container.builder import build_container
 from lumen.presentation.cli.commands import commands
 
 
