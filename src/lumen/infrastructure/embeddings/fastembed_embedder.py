@@ -1,4 +1,5 @@
 from fastembed import TextEmbedding
+from typing import Iterable
 from pathlib import Path
 import warnings
 
@@ -16,3 +17,10 @@ class FastembedEmbedder:
         return next(
             iter(self._model.embed(f"{self._prefix.removesuffix(':')}: {text}"))
         ).tolist()
+
+    def embed_many(
+        self, texts: Iterable[str], batch_size: int = 256
+    ) -> Iterable[list[float]]:
+        prefixed_texts = (f"{self._prefix.removesuffix(':')}: {text}" for text in texts)
+        for e in self._model.embed(prefixed_texts, batch_size=batch_size):
+            yield e.tolist()
