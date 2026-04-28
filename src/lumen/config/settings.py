@@ -17,6 +17,8 @@ class Settings(BaseSettings):
     embedding_batch_size: int = Field(alias="EMBEDDING_BATCH_SIZE", default=128)
     use_gpu: bool = Field(alias="USE_GPU", default=False)
     llm_model: str = Field(alias="LLM_MODEL")
+    ollama_host: str | None = Field(alias="OLLAMA_HOST", default=None)
+    ollama_token: str | None = Field(alias="OLLAMA_TOKEN", default=None)
 
     postgres_user: str = Field(alias="POSTGRES_USER")
     postgres_password: str = Field(alias="POSTGRES_PASSWORD")
