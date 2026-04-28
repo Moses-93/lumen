@@ -5,11 +5,15 @@ import warnings
 
 
 class FastembedEmbedder:
-    def __init__(self, model: str, prefix: str, cache_dir: Path | None = None) -> None:
+    def __init__(
+        self, model: str, prefix: str, cuda: bool, cache_dir: Path | None = None
+    ) -> None:
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", category=UserWarning)
             self._model = TextEmbedding(
-                model, cache_dir=str(cache_dir) if cache_dir else None
+                model_name=model,
+                cache_dir=str(cache_dir) if cache_dir else None,
+                cuda=cuda,
             )
         self._prefix = prefix
 
