@@ -1,0 +1,16 @@
+#!/bin/bash
+
+ENV_ARGS=()
+
+if [ -n "$_LUMEN_COMPLETE" ]; then
+    ENV_ARGS+=("-e" "_LUMEN_COMPLETE=${_LUMEN_COMPLETE}")
+    ENV_ARGS+=("-e" "COMP_WORDS=${COMP_WORDS}")
+    ENV_ARGS+=("-e" "COMP_CWORD=${COMP_CWORD}")
+fi
+
+docker compose \
+    -f "__DOCKER_COMPOSE_FILE__" \
+    --env-file "__ENV_FILE__" \
+    exec "${ENV_ARGS[@]}" __CLI_SERVICE__ \
+    lumen "$@" 2>&1 | \
+    grep -v "^\(2[0-9]\{3\}-[0-9]\{2\}-[0-9]\{2\}\|.*VerifyEachNodeIsAssignedToAnEp\|.*session_state\)"
