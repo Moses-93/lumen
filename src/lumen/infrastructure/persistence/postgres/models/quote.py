@@ -49,7 +49,7 @@ class QuoteModel(BaseModel):
         )
 
     def to_entity(self) -> Quote:
-        return Quote(
+        return Quote.reconstruct(
             id=self.id,
             author=self.author,
             domain=self.domain,

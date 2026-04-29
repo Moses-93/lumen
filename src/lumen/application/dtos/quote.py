@@ -12,7 +12,7 @@ class SeedQuoteCommand(BaseModel):
     semantic_tags: list[str] = Field(default_factory=list)
 
     def to_entity(self) -> Quote:
-        return Quote(
+        return Quote.new(
             author=self.author,
             domain=self.domain,
             text=self.text,
