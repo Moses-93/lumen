@@ -1,0 +1,83 @@
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?POSTGRES_USER is required}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+      POSTGRES_DB: ${POSTGRES_DB:?POSTGRES_DB is required}
+    ports:
+      - "${POSTGRES_PORT:?POSTGRES_PORT is required}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - ../.env
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:?POSTGRES_USER is required} -d ${POSTGRES_DB:?POSTGRES_DB is required}",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - lumen-network
+
+  cli-cpu:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: lumen_cli
+    restart: "no"
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - ../.env
+    environment:
+      POSTGRES_HOST: db
+      HF_TOKEN: ${HF_TOKEN}
+    volumes:
+      - ..:/app
+      - ${EMBEDDING_CACHE_DIR}:${EMBEDDING_CACHE_DIR}
+    networks:
+      - lumen-network
+    command: tail -f /dev/null
+  
+  cli-gpu:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.gpu
+    container_name: lumen_cli_gpu
+    restart: "no"
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - ../.env
+    environment:
+      POSTGRES_HOST: db
+      HF_TOKEN: ${HF_TOKEN}
+      ORT_LOGGING_LEVEL: ${ORT_LOGGING_LEVEL}
+    volumes:
+      - ..:/app
+      - ${EMBEDDING_CACHE_DIR}:${EMBEDDING_CACHE_DIR}
+    networks:
+      - lumen-network
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    command: tail -f /dev/null
+
+networks:
+  lumen-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
