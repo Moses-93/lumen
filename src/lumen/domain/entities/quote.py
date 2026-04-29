@@ -10,8 +10,9 @@ from lumen.domain.value_objects import Author, QuoteText
 @dataclass(slots=True)
 class Quote:
     author: Author
-    domain: str | None
     text: QuoteText
+    domain: str | None
+    source: str | None
     tags: list[str] = field(default_factory=list[str])
     created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
@@ -24,6 +25,7 @@ class Quote:
         text: str,
         tags: list[str] | None = None,
         domain: str | None = None,
+        source: str | None = None,
     ) -> Quote:
         """Factory method to create a new Quote from primitives.
 
@@ -36,6 +38,7 @@ class Quote:
             text=QuoteText(text),
             tags=tags or [],
             domain=domain,
+            source=source,
         )
 
     @classmethod
@@ -48,6 +51,7 @@ class Quote:
         updated_at: datetime,
         tags: list[str],
         domain: str | None = None,
+        source: str | None = None,
     ) -> Quote:
         """Reconstructs a Quote from raw data.
 
@@ -61,6 +65,7 @@ class Quote:
             text=QuoteText(text),
             tags=tags,
             domain=domain,
+            source=source,
             created_at=created_at,
             updated_at=updated_at,
         )

@@ -18,6 +18,7 @@ class QuoteModel(BaseModel):
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
     author: Mapped[str] = mapped_column(String(255), nullable=False)
     domain: Mapped[str | None] = mapped_column(String(255))
+    source: Mapped[str | None] = mapped_column(String(255))
     text: Mapped[str] = mapped_column(Text, nullable=False)
     tags: Mapped[list[str]] = mapped_column(ARRAY(String), default=list)
 
@@ -41,6 +42,7 @@ class QuoteModel(BaseModel):
             id=quote.id,
             author=quote.author,
             domain=quote.domain,
+            source=quote.source,
             text=quote.text,
             tags=quote.tags,
             embedding=QuoteEmbeddingModel(embedding=embedding),
@@ -53,6 +55,7 @@ class QuoteModel(BaseModel):
             id=self.id,
             author=self.author,
             domain=self.domain,
+            source=self.source,
             text=self.text,
             tags=self.tags,
             created_at=self.created_at,
