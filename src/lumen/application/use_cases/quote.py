@@ -38,7 +38,7 @@ class SeedQuotesInteractor:
         return Success(total_count)
 
     def _build_embedding_text(self, quote: Quote) -> str:
-        parts = [quote.text]
+        parts = [str(quote.text)]
         if quote.domain:
             parts.append(quote.domain)
         if quote.tags:

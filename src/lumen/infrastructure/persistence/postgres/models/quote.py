@@ -40,10 +40,10 @@ class QuoteModel(BaseModel):
     def from_entity(cls, quote: Quote, embedding: list[float]) -> QuoteModel:
         return cls(
             id=quote.id,
-            author=quote.author,
+            author=str(quote.author),
             domain=quote.domain,
             source=quote.source,
-            text=quote.text,
+            text=str(quote.text),
             tags=quote.tags,
             embedding=QuoteEmbeddingModel(embedding=embedding),
             created_at=quote.created_at,
