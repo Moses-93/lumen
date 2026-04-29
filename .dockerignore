@@ -1,0 +1,32 @@
+.venv
+.git
+__pycache__
+*.pyc
+.pytest_cache
+.ruff_cache
+
+# Data & Assets
+assets/
+scripts/
+
+# Environments & Secrets
+.env
+.python-version
+
+# IDEs & Editor configs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Python distribution / Build
+build/
+dist/
+*.egg-info/
+.mypy_cache/
+
+# Documentation & Meta
+README.md
+LICENSE
+concept.md
+Makefile
