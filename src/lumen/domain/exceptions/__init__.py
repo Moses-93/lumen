@@ -1,12 +1,12 @@
 from .quote import (
-    AuthorInvalidError,
+    QuoteAuthorInvalidError,
     QuoteNotFoundError,
     QuoteTextInvalidError,
     QuoteError,
 )
 
 __all__ = [
-    "AuthorInvalidError",
+    "QuoteAuthorInvalidError",
     "QuoteNotFoundError",
     "QuoteTextInvalidError",
     "QuoteError",
