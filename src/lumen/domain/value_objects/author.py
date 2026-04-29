@@ -12,7 +12,7 @@ class Author:
     def __post_init__(self) -> None:
         cleaned_value = self.value.strip()
 
-        if not (3 <= len(cleaned_value) <= 255):
+        if not (2 <= len(cleaned_value) <= 255):
             raise QuoteAuthorInvalidError(cleaned_value)
 
         if cleaned_value.islower() or cleaned_value.isupper():
