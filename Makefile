@@ -100,8 +100,8 @@ makemigrations: ## Autogenerate a new migration (Usage: make makemigrations msg=
 	@echo "$(GREEN)Creating new migration...$(RESET)"
 	alembic revision --autogenerate -m "$(msg)"
 
-.PHONY: clean
-clean: ## Remove unnecessary python cache files
+.PHONY: clean-py
+clean-py: ## Remove unnecessary python cache files
 	@echo "$(YELLOW)Cleaning up __pycache__ and unused files...$(RESET)"
 	find . -type d -name "__pycache__" -exec rm -rf {} +
 	find . -type f -name "*.pyc" -delete
