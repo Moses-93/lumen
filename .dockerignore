@@ -26,7 +26,6 @@ dist/
 .mypy_cache/
 
 # Documentation & Meta
-README.md
 LICENSE
 concept.md
 Makefile
