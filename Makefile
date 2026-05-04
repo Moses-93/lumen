@@ -10,7 +10,7 @@ ifeq (,$(filter $(ENV),$(VALID_ENVS)))
 $(error ENV must be one of: $(VALID_ENVS))
 endif
 
-DOCKER_COMPOSE_FILE = $(if $(filter $(ENV),prod),docker/docker-compose.yaml,docker/docker-compose-dev.yaml)
+DOCKER_COMPOSE_FILE = $(if $(filter $(ENV),prod),$(CURDIR)/docker/docker-compose.yaml,$(CURDIR)/docker/docker-compose-dev.yaml)
 ENV_FILE ?= $(if $(filter $(ENV),prod),$(CURDIR)/.env.prod,$(CURDIR)/.env)
 DOCKER_COMPOSE = ENV_FILE=$(ENV_FILE) docker compose -f $(DOCKER_COMPOSE_FILE) --env-file $(ENV_FILE)
 
