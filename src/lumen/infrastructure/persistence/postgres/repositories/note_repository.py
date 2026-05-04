@@ -1,10 +1,15 @@
+from datetime import datetime
 from uuid import UUID
+
 from sqlalchemy import select, delete
 from sqlalchemy.orm import Session
 
 from lumen.domain.repositories import NoteRepository
 from lumen.domain.entities.note import Note
-from lumen.infrastructure.persistence.postgres.models.note import NoteModel
+from lumen.infrastructure.persistence.postgres.models.note import (
+    NoteModel,
+    NoteEmbeddingModel,
+)
 
 
 class PostgresNoteRepository(NoteRepository):
@@ -26,12 +31,21 @@ class PostgresNoteRepository(NoteRepository):
         model = self._session.scalars(stmt).first()
         return model.to_entity() if model else None
 
-    def get_all(self, limit: int = 10, offset: int = 0) -> list[Note]:
-        stmt = (
-            select(NoteModel)
-            .order_by(NoteModel.created_at.desc())
-            .limit(limit)
-            .offset(offset)
-        )
+    def get_all(
+        self,
+        limit: int = 10,
+        offset: int = 0,
+        from_date: datetime | None = None,
+        to_date: datetime | None = None,
+    ) -> list[Note]:
+        stmt = select(NoteModel).order_by(NoteModel.created_at.desc())
+
+        if from_date:
+            stmt = stmt.where(NoteModel.created_at >= from_date)
+        if to_date:
+            stmt = stmt.where(NoteModel.created_at <= to_date)
+
+        stmt = stmt.limit(limit).offset(offset)
+
         models = self._session.scalars(stmt).all()
         return [m.to_entity() for m in models]

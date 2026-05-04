@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from datetime import datetime
 from uuid import UUID
 
 from lumen.domain.entities import Note
@@ -14,7 +15,13 @@ class NoteRepository(ABC):
         pass
 
     @abstractmethod
-    def get_all(self, limit: int = 10, offset: int = 0) -> list[Note]:
+    def get_all(
+        self,
+        limit: int = 10,
+        offset: int = 0,
+        from_date: datetime | None = None,
+        to_date: datetime | None = None,
+    ) -> list[Note]:
         pass
 
     @abstractmethod
