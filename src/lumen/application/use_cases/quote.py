@@ -18,7 +18,7 @@ class SeedQuotesInteractor:
 
     def execute(
         self, commands: Iterable[SeedQuoteCommand], batch_size: int = 64
-    ) -> Result[int]:
+    ) -> Iterable[Result[int]]:
         """Executes the seed quotes command."""
         total_count = 0
         for chunk in batched(commands, batch_size):
@@ -34,8 +34,7 @@ class SeedQuotesInteractor:
                 self._uow.save()
 
             total_count += len(quotes)
-
-        return Success(total_count)
+            yield Success(total_count)
 
     def _build_embedding_text(self, quote: Quote) -> str:
         parts = [str(quote.text)]

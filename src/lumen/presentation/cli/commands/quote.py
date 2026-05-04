@@ -1,6 +1,7 @@
 import json
 from itertools import islice
 from pathlib import Path
+from tqdm import tqdm
 
 import click
 from dishka import FromDishka
@@ -47,20 +48,28 @@ def seed_quotes(
         skipped = islice(f, offset, None)
         target_lines = islice(skipped, limit) if limit is not None else skipped
 
-        commands = (
-            SeedQuoteCommand.model_validate(json.loads(line))
-            for line in target_lines
-            if line.strip()
-        )
+        with tqdm(
+            total=limit,
+            desc="Lumen...",
+            unit="quote",
+            disable=False,
+            ncols=80,
+        ) as bar:
+            bar.refresh()
 
-        result = interactor.execute(commands, batch_size=batch_size)
-        return process_result(
-            result=result,
-            on_success=lambda count: click.secho(
-                f"Успішно завантажено {count} цитат!", fg="green"
-            ),
-            on_failure=handle_failure,
-        )
+            commands = (
+                SeedQuoteCommand.model_validate(json.loads(line))
+                for line in target_lines
+                if line.strip()
+            )
+
+            count = 0
+            for result in interactor.execute(commands, batch_size=batch_size):
+                if not bool(result):
+                    return handle_failure(result)
+
+                bar.update(result.data - count)
+                count = result.data
 
 
 @click.group()
