@@ -25,5 +25,16 @@ class NoteRepository(ABC):
         pass
 
     @abstractmethod
+    def find_similar(
+        self,
+        embedding: list[float],
+        limit: int = 5,
+        threshold: float = 0.28,
+        from_date: datetime | None = None,
+        to_date: datetime | None = None,
+    ) -> list[Note]:
+        pass
+
+    @abstractmethod
     def delete(self, note_id: UUID) -> None:
         pass

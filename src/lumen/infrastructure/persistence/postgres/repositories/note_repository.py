@@ -49,3 +49,29 @@ class PostgresNoteRepository(NoteRepository):
 
         models = self._session.scalars(stmt).all()
         return [m.to_entity() for m in models]
+
+    def find_similar(
+        self,
+        embedding: list[float],
+        limit: int = 5,
+        threshold: float = 0.28,
+        from_date: datetime | None = None,
+        to_date: datetime | None = None,
+    ) -> list[Note]:
+        distance = NoteEmbeddingModel.embedding.cosine_distance(embedding)
+        stmt = (
+            select(NoteModel)
+            .join(NoteEmbeddingModel)
+            .where(distance < threshold)
+            .order_by(distance)
+        )
+
+        if from_date:
+            stmt = stmt.where(NoteModel.created_at >= from_date)
+        if to_date:
+            stmt = stmt.where(NoteModel.created_at <= to_date)
+
+        stmt = stmt.limit(limit)
+
+        models = self._session.scalars(stmt).all()
+        return [m.to_entity() for m in models]
