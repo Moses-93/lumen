@@ -50,8 +50,12 @@ class FindQuotesInteractor:
         self._embedder = embedder
         self._uow = uow
 
-    def execute(self, query: str, limit: int = 1) -> Result[list[Quote]]:
+    def execute(
+        self, query: str, limit: int = 1, threshold: float = 0.28
+    ) -> Result[list[Quote]]:
         """Executes the find quotes by semantic query."""
         query_embedding = self._embedder.embed(query)
-        quotes = self._uow.quotes.find_similar(query_embedding, limit=limit)
+        quotes = self._uow.quotes.find_similar(
+            query_embedding, limit=limit, threshold=threshold
+        )
         return Success(quotes)

@@ -81,10 +81,17 @@ def quotes():
 @quotes.command(name="find")
 @click.argument("query")
 @click.option("--limit", default=1, help="Number of results to retrieve.")
+@click.option(
+    "--threshold",
+    default=0.28,
+    type=click.FloatRange(0, 1),
+    help="Cosine distance threshold for similarity.",
+)
 @inject
 def find_quotes(
     query: str,
     limit: int,
+    threshold: float,
     interactor: FromDishka[FindQuotesInteractor],
 ) -> None:
     """Search quotes by semantic similarity.
@@ -92,9 +99,10 @@ def find_quotes(
     Args:
         query: Text query to search for.
         limit: Maximum number of quotes to return.
+        threshold: Cosine distance threshold for similarity.
         interactor: The interactor for semantic search.
     """
-    result = interactor.execute(query, limit=limit)
+    result = interactor.execute(query, limit=limit, threshold=threshold)
     return process_result(
         result=result,
         on_success=lambda data: void(
