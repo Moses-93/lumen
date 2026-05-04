@@ -83,7 +83,7 @@ install-cli:
 	@mkdir -p $(INSTALL_DIR)
 	@sed -e "s|__DOCKER_COMPOSE_FILE__|$(DOCKER_COMPOSE_FILE)|g" \
 	     -e "s|__ENV_FILE__|$(ENV_FILE)|g" \
-	     -e "s|__CLI_SERVICE__|$(CLI_SERVICE)|g" \
+	     -e "s|__CLI_SERVICE__|\$$(grep '^USE_GPU=' $(ENV_FILE) 2>/dev/null \| cut -d'=' -f2 \| tr -d '[:space:]' \| grep -q 'true' \&\& echo cli-gpu \|\| echo cli-cpu)|g" \
 	     scripts/lumen > $(INSTALL_DIR)/lumen
 	@chmod +x $(INSTALL_DIR)/lumen
 	@$(DOCKER_COMPOSE) exec -e _LUMEN_COMPLETE=bash_source $(CLI_SERVICE) lumen > $(HOME)/.lumen-complete.bash 2>/dev/null || echo "# Completion failed" > $(HOME)/.lumen-complete.bash
