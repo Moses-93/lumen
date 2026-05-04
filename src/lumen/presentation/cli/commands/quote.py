@@ -1,7 +1,6 @@
 import json
 from itertools import islice
 from pathlib import Path
-from tqdm import tqdm
 
 import click
 from dishka import FromDishka
@@ -9,6 +8,7 @@ from dishka.integrations.click import inject
 
 from lumen.application.dtos import SeedQuoteCommand
 from lumen.application.use_cases import SeedQuotesInteractor, FindQuotesInteractor
+from lumen.presentation.cli.utils.progress import active_progress
 from lumen.presentation.cli.utils.result import handle_failure, process_result, void
 
 
@@ -48,14 +48,13 @@ def seed_quotes(
         skipped = islice(f, offset, None)
         target_lines = islice(skipped, limit) if limit is not None else skipped
 
-        with tqdm(
+        with active_progress(
             total=limit,
             desc="Lumen...",
             unit="quote",
             disable=False,
             ncols=80,
         ) as bar:
-            bar.refresh()
 
             commands = (
                 SeedQuoteCommand.model_validate(json.loads(line))
