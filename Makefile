@@ -100,6 +100,16 @@ makemigrations: ## Autogenerate a new migration (Usage: make makemigrations msg=
 	@echo "$(GREEN)Creating new migration...$(RESET)"
 	alembic revision --autogenerate -m "$(msg)"
 
+.PHONY: dump-quotes
+dump-quotes: ## Create a compressed dump of quotes
+	@echo "$(GREEN)Exporting quotes to assets/quotes.dump...$(RESET)"
+	$(DOCKER_COMPOSE) exec -T db sh -c 'pg_dump -U $$POSTGRES_USER -d $$POSTGRES_DB -t quotes -t quote_embeddings -F c' > assets/quotes.dump
+
+.PHONY: restore-quotes
+restore-quotes: ## Restore quotes from assets/quotes.dump
+	@echo "$(YELLOW)Restoring quotes from assets/quotes.dump...$(RESET)"
+	$(DOCKER_COMPOSE) exec -T db sh -c 'pg_restore -U $$POSTGRES_USER -d $$POSTGRES_DB -c -t quotes -t quote_embeddings -1' < assets/quotes.dump
+
 .PHONY: clean-py
 clean-py: ## Remove unnecessary python cache files
 	@echo "$(YELLOW)Cleaning up __pycache__ and unused files...$(RESET)"
