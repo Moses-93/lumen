@@ -7,6 +7,8 @@ from lumen.application.use_cases import (
     SeedQuotesInteractor,
     FindQuotesInteractor,
     AddNoteInteractor,
+    GetNotesInteractor,
+    FindSimilarNotesInteractor,
 )
 
 
@@ -39,3 +41,18 @@ class UseCasesProvider(Provider):
             passage_embedder=passage_embedder,
             query_embedder=query_embedder,
         )
+
+    @provide(scope=Scope.REQUEST)
+    def get_notes(
+        self,
+        uow: UnitOfWork,
+    ) -> GetNotesInteractor:
+        return GetNotesInteractor(uow)
+
+    @provide(scope=Scope.REQUEST)
+    def find_similar_notes(
+        self,
+        query_embedder: Annotated[Embedder, FromComponent("query")],
+        uow: UnitOfWork,
+    ) -> FindSimilarNotesInteractor:
+        return FindSimilarNotesInteractor(uow, query_embedder=query_embedder)
