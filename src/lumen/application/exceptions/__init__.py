@@ -21,6 +21,11 @@ from .llm import (
     LlmModelNotFoundError,
     LlmError,
 )
+from .embedding import (
+    EmbeddingInitializationError,
+    EmbeddingInferenceError,
+    EmbeddingError,
+)
 
 
 __all__ = [
@@ -43,4 +48,7 @@ __all__ = [
     "LlmOperationalError",
     "LlmModelNotFoundError",
     "LlmError",
+    "EmbeddingInitializationError",
+    "EmbeddingInferenceError",
+    "EmbeddingError",
 ]
