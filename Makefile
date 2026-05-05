@@ -108,7 +108,8 @@ dump-quotes: ## Create a compressed dump of quotes
 .PHONY: restore-quotes
 restore-quotes: ## Restore quotes from assets/quotes.dump
 	@echo "$(YELLOW)Restoring quotes from assets/quotes.dump...$(RESET)"
-	$(DOCKER_COMPOSE) exec -T db sh -c 'pg_restore -U $$POSTGRES_USER -d $$POSTGRES_DB -c -t quotes -t quote_embeddings -1' < assets/quotes.dump
+	$(DOCKER_COMPOSE) exec -T db sh -c 'psql -U $$POSTGRES_USER -d $$POSTGRES_DB -c "DROP TABLE IF EXISTS quote_embeddings CASCADE; DROP TABLE IF EXISTS quotes CASCADE;"'
+	$(DOCKER_COMPOSE) exec -T db sh -c 'pg_restore -U $$POSTGRES_USER -d $$POSTGRES_DB --no-owner --no-privileges -t quotes -t quote_embeddings -1' < assets/quotes.dump
 
 .PHONY: clean-py
 clean-py: ## Remove unnecessary python cache files
