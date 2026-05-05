@@ -8,7 +8,16 @@ from dishka.integrations.click import inject
 
 from lumen.application.dtos import SeedQuoteCommand
 from lumen.application.use_cases import SeedQuotesInteractor, FindQuotesInteractor
-from lumen.presentation.cli.utils.progress import active_progress
+from rich.console import Console
+from rich.progress import (
+    Progress,
+    SpinnerColumn,
+    TextColumn,
+    BarColumn,
+    TaskProgressColumn,
+    TimeElapsedColumn,
+    MofNCompleteColumn,
+)
 from lumen.presentation.cli.utils.result import handle_failure, process_result, void
 
 
@@ -48,27 +57,28 @@ def seed_quotes(
         skipped = islice(f, offset, None)
         target_lines = islice(skipped, limit) if limit is not None else skipped
 
-        with active_progress(
-            total=limit,
-            desc="Lumen...",
-            unit="quote",
-            disable=False,
-            ncols=80,
-        ) as bar:
+        console = Console(stderr=True, force_terminal=True)
+        with Progress(
+            SpinnerColumn(),
+            TextColumn("[progress.description]{task.description}"),
+            BarColumn(),
+            TaskProgressColumn(),
+            MofNCompleteColumn(),
+            TimeElapsedColumn(),
+            console=console,
+        ) as progress:
+            task = progress.add_task("Lumen...", total=limit)
 
             commands = (
                 SeedQuoteCommand.model_validate(json.loads(line))
                 for line in target_lines
                 if line.strip()
             )
-
-            count = 0
             for result in interactor.execute(commands, batch_size=batch_size):
                 if not bool(result):
                     return handle_failure(result)
 
-                bar.update(result.data - count)
-                count = result.data
+                progress.update(task, completed=result.data)
 
 
 @click.group()
