@@ -10,9 +10,9 @@ ifeq (,$(filter $(ENV),$(VALID_ENVS)))
 $(error ENV must be one of: $(VALID_ENVS))
 endif
 
+ENV_FILE = $(CURDIR)/.env
 DOCKER_COMPOSE_FILE = $(if $(filter $(ENV),prod),$(CURDIR)/docker/docker-compose.yaml,$(CURDIR)/docker/docker-compose-dev.yaml)
-ENV_FILE ?= $(if $(filter $(ENV),prod),$(CURDIR)/.env.prod,$(CURDIR)/.env)
-DOCKER_COMPOSE = ENV_FILE=$(ENV_FILE) docker compose -f $(DOCKER_COMPOSE_FILE) --env-file $(ENV_FILE)
+DOCKER_COMPOSE = USER_ID=$$(id -u) GROUP_ID=$$(id -g) ENV_FILE=$(ENV_FILE) docker compose -f $(DOCKER_COMPOSE_FILE) --env-file $(ENV_FILE)
 
 USE_GPU ?= $(shell grep "^USE_GPU=" $(ENV_FILE) 2>/dev/null | cut -d'=' -f2 | tr -d '[:space:]')
 CLI_SERVICE = $(if $(filter true,$(USE_GPU)),cli-gpu,cli-cpu)
