@@ -12,5 +12,4 @@ docker compose \
     -f "__DOCKER_COMPOSE_FILE__" \
     --env-file "__ENV_FILE__" \
     exec "${ENV_ARGS[@]}" __CLI_SERVICE__ \
-    lumen "$@" | \
-    grep -v "^\(2[0-9]\{3\}-[0-9]\{2\}-[0-9]\{2\}\|.*VerifyEachNodeIsAssignedToAnEp\|.*session_state\)"
+    lumen "$@"
