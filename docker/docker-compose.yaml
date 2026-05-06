@@ -50,7 +50,7 @@ services:
       POSTGRES_HOST: db
       HF_TOKEN: ${HF_TOKEN}
     volumes:
-      - EMBEDDING_CACHE_DIR:${EMBEDDING_CACHE_DIR}
+      - ${EMBEDDING_CACHE_DIR}:${EMBEDDING_CACHE_DIR}
     networks:
       - lumen-network
     deploy:
@@ -82,7 +82,7 @@ services:
       POSTGRES_HOST: db
       HF_TOKEN: ${HF_TOKEN}
     volumes:
-      - EMBEDDING_CACHE_DIR:${EMBEDDING_CACHE_DIR}
+      - ${EMBEDDING_CACHE_DIR}:${EMBEDDING_CACHE_DIR}
     networks:
       - lumen-network
     deploy:
@@ -102,9 +102,3 @@ networks:
 
 volumes:
   postgres_data_prod:
-  EMBEDDING_CACHE_DIR:
-    driver: local
-    driver_opts:
-      type: none
-      device: ${EMBEDDING_CACHE_DIR}
-      o: bind
