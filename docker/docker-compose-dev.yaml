@@ -31,6 +31,7 @@ services:
       dockerfile: docker/Dockerfile
     container_name: lumen_cli_cpu
     profiles: [cpu]
+    user: "${USER_ID}:${GROUP_ID}"
     restart: "no"
     depends_on:
       db:
@@ -53,6 +54,7 @@ services:
       dockerfile: docker/Dockerfile.gpu
     container_name: lumen_cli_gpu
     profiles: [gpu]
+    user: "${USER_ID}:${GROUP_ID}"
     restart: "no"
     depends_on:
       db:

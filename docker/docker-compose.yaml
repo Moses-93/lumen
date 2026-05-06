@@ -35,6 +35,7 @@ services:
       target: production
     profiles: [cpu]
     restart: unless-stopped
+    user: "${USER_ID}:${GROUP_ID}"
     logging:
       driver: "json-file"
       options:
@@ -64,6 +65,7 @@ services:
       target: production
     profiles: [gpu]
     restart: unless-stopped
+    user: "${USER_ID}:${GROUP_ID}"
     logging:
       driver: "json-file"
       options:
