@@ -64,7 +64,6 @@ services:
     environment:
       POSTGRES_HOST: db
       HF_TOKEN: ${HF_TOKEN}
-      ORT_LOGGING_LEVEL: ${ORT_LOGGING_LEVEL}
     volumes:
       - ..:/app
       - ${EMBEDDING_CACHE_DIR}:${EMBEDDING_CACHE_DIR}
