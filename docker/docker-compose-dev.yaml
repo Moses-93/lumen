@@ -29,7 +29,8 @@ services:
     build:
       context: ..
       dockerfile: docker/Dockerfile
-    container_name: lumen_cli
+    container_name: lumen_cli_cpu
+    profiles: [cpu]
     restart: "no"
     depends_on:
       db:
@@ -51,6 +52,7 @@ services:
       context: ..
       dockerfile: docker/Dockerfile.gpu
     container_name: lumen_cli_gpu
+    profiles: [gpu]
     restart: "no"
     depends_on:
       db:

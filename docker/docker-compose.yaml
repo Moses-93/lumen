@@ -33,6 +33,7 @@ services:
       context: ..
       dockerfile: docker/Dockerfile
       target: production
+    profiles: [cpu]
     restart: unless-stopped
     logging:
       driver: "json-file"
@@ -61,6 +62,7 @@ services:
       context: ..
       dockerfile: docker/Dockerfile.gpu
       target: production
+    profiles: [gpu]
     restart: unless-stopped
     logging:
       driver: "json-file"
