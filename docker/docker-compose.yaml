@@ -58,7 +58,7 @@ services:
         limits:
           cpus: '1.0'
           memory: 6G
-    command: python -m lumen.bootstrap.setup.cli
+    command: tail -f /dev/null
 
   cli-gpu:
     build:
@@ -94,7 +94,7 @@ services:
               capabilities: [gpu]
         limits:
           memory: 8G
-    command: python -m lumen.bootstrap.setup.cli
+    command: tail -f /dev/null
 
 networks:
   lumen-network:
