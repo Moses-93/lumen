@@ -2,21 +2,17 @@
 ENV ?= dev
 VALID_ENVS := dev prod
 
-ifneq ($(strip $(env)),)
-	ENV := $(env)
-endif
-
 ifeq (,$(filter $(ENV),$(VALID_ENVS)))
 $(error ENV must be one of: $(VALID_ENVS))
 endif
 
 ENV_FILE = $(CURDIR)/.env
-DOCKER_COMPOSE_FILE = $(if $(filter $(ENV),prod),$(CURDIR)/docker/docker-compose.yaml,$(CURDIR)/docker/docker-compose-dev.yaml)
-DOCKER_COMPOSE = USER_ID=$$(id -u) GROUP_ID=$$(id -g) ENV_FILE=$(ENV_FILE) docker compose -f $(DOCKER_COMPOSE_FILE) --env-file $(ENV_FILE)
+-include $(ENV_FILE)
 
-USE_GPU ?= $(shell grep "^USE_GPU=" $(ENV_FILE) 2>/dev/null | cut -d'=' -f2 | tr -d '[:space:]')
-CLI_SERVICE = $(if $(filter true,$(USE_GPU)),cli-gpu,cli-cpu)
-INSTALL_DIR = $(HOME)/.local/bin
+ACTIVE_PROFILE = $(if $(filter true,$(USE_GPU)),gpu,cpu)
+DOCKER_COMPOSE_FILE = $(if $(filter $(ENV),prod),$(CURDIR)/docker/docker-compose.yaml,$(CURDIR)/docker/docker-compose-dev.yaml)
+DOCKER_COMPOSE = USER_ID=$$(id -u) GROUP_ID=$$(id -g) ENV_FILE=$(ENV_FILE) COMPOSE_PROFILES=$(ACTIVE_PROFILE) docker compose -f $(DOCKER_COMPOSE_FILE) --env-file $(ENV_FILE)
+
 
 # Default Target
 .DEFAULT_GOAL := help
@@ -34,6 +30,7 @@ RESET  := $(shell tput -Txterm sgr0)
 .PHONY: up
 up: ## Start all Docker Compose services in the background
 	@echo "$(GREEN)Starting all Docker services...$(RESET)"
+	mkdir -p $(EMBEDDING_CACHE_DIR)
 	$(DOCKER_COMPOSE) up -d $(UP_FLAGS)
 
 .PHONY: up-build
@@ -43,6 +40,11 @@ up-build: up ## Start all services and rebuild images
 .PHONY: up-recreate
 up-recreate: UP_FLAGS := --build --force-recreate
 up-recreate: up ## Start all services with rebuild and force recreate
+
+.PHONY: db
+db: ## Start the database service
+	@echo "$(GREEN)Starting database...$(RESET)"
+	$(DOCKER_COMPOSE) up -d db
 
 .PHONY: down
 down: ## Stop and remove containers and networks
@@ -62,33 +64,12 @@ logs: ## View the logs of all Docker Compose containers
 config: ## Validate and print resolved Docker Compose config
 	$(DOCKER_COMPOSE) config
 
-.PHONY: db
-db: ## Start the database service
-	@echo "$(GREEN)Starting database...$(RESET)"
-	$(DOCKER_COMPOSE) up -d db
-
-.PHONY: cli-cpu
-cli-cpu: ## Start the CLI service (CPU)
-	@echo "$(GREEN)Starting CLI service (CPU)...$(RESET)"
-	$(DOCKER_COMPOSE) up -d cli-cpu
-
-.PHONY: cli-gpu
-cli-gpu: ## Start the CLI service (GPU)
-	@echo "$(GREEN)Starting CLI GPU service...$(RESET)"
-	$(DOCKER_COMPOSE) up -d cli-gpu
-
 .PHONY: install-cli
 install-cli:
-	@echo "$(GREEN)Installing the CLI tool...$(RESET)"
-	@mkdir -p $(INSTALL_DIR)
-	@sed -e "s|__DOCKER_COMPOSE_FILE__|$(DOCKER_COMPOSE_FILE)|g" \
-	     -e "s|__ENV_FILE__|$(ENV_FILE)|g" \
-	     -e "s|__CLI_SERVICE__|\$$(grep '^USE_GPU=' $(ENV_FILE) 2>/dev/null \| cut -d'=' -f2 \| tr -d '[:space:]' \| grep -q 'true' \&\& echo cli-gpu \|\| echo cli-cpu)|g" \
-	     scripts/lumen > $(INSTALL_DIR)/lumen
-	@chmod +x $(INSTALL_DIR)/lumen
-	@$(DOCKER_COMPOSE) exec -e _LUMEN_COMPLETE=bash_source $(CLI_SERVICE) lumen > $(HOME)/.lumen-complete.bash 2>/dev/null || echo "# Completion failed" > $(HOME)/.lumen-complete.bash
-	@grep -qxF 'source $(HOME)/.lumen-complete.bash' $(HOME)/.bashrc || echo 'source $(HOME)/.lumen-complete.bash' >> $(HOME)/.bashrc
-	@echo "$(GREEN)Done!$(RESET)"
+	@mkdir -p $(HOME)/.local/bin
+	@chmod +x $(CURDIR)/scripts/lumen
+	@ln -sf $(CURDIR)/scripts/lumen $(HOME)/.local/bin/lumen
+	@echo "CLI installed. Restart terminal or run: source ~/.bashrc"
 
 .PHONY: migrate
 migrate: ## Apply database migrations using Alembic
