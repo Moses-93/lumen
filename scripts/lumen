@@ -11,7 +11,7 @@ USE_GPU=$(grep "^USE_GPU=" "$ENV_FILE" 2>/dev/null | cut -d'=' -f2 | tr -d '[:sp
 CLI_SERVICE="cli-cpu"
 [[ "$USE_GPU" == "true" ]] && CLI_SERVICE="cli-gpu"
 
-docker compose \
+USER_ID=$(id -u) GROUP_ID=$(id -g) docker compose \
     -f "$COMPOSE_FILE" \
     --env-file "$ENV_FILE" \
     exec "$CLI_SERVICE" \
