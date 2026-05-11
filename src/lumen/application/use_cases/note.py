@@ -6,10 +6,12 @@ from lumen.application.dtos import (
     FindSimilarNotesQuery,
 )
 from lumen.application.interfaces import Embedder, UnitOfWork
-from lumen.domain.entities import Quote, Note
+from lumen.domain.entities import Note, Quote
 
 
 class AddNoteInteractor:
+    """Orchestrates note creation."""
+
     def __init__(
         self,
         uow: UnitOfWork,
@@ -22,7 +24,14 @@ class AddNoteInteractor:
         self._uow = uow
 
     def execute(self, command: AddNoteCommand) -> Result[list[Quote]]:
-        """Executes the add note command."""
+        """Persists a new note and retrieves semantically similar quotes.
+
+        Args:
+            command: Input data for the new note.
+
+        Returns:
+            Collection of quotes matching the note's context.
+        """
         note = command.to_entity()
 
         passage_embedding = self._passage_embedder.embed(note.text)
@@ -37,10 +46,20 @@ class AddNoteInteractor:
 
 
 class GetNotesInteractor:
+    """Orchestrates temporal and paginated note retrieval."""
+
     def __init__(self, uow: UnitOfWork) -> None:
         self._uow = uow
 
     def execute(self, query: GetNotesQuery) -> Result[list[Note]]:
+        """Retrieves notes matching the specified query filters.
+
+        Args:
+            query: Parameters for filtering and pagination.
+
+        Returns:
+            Collection of notes matching the query.
+        """
         with self._uow.transaction():
             notes = self._uow.notes.get_all(
                 limit=query.limit,
@@ -51,6 +70,8 @@ class GetNotesInteractor:
 
 
 class FindSimilarNotesInteractor:
+    """Orchestrates semantic search across existing notes."""
+
     def __init__(
         self,
         uow: UnitOfWork,
@@ -61,6 +82,14 @@ class FindSimilarNotesInteractor:
         self._query_embedder = query_embedder
 
     def execute(self, query: FindSimilarNotesQuery) -> Result[list[Note]]:
+        """Finds notes semantically similar to the provided query text.
+
+        Args:
+            query: Search parameters and input text.
+
+        Returns:
+            Collection of notes ordered by semantic similarity.
+        """
         embedding = self._query_embedder.embed(query.text)
 
         with self._uow.transaction():

@@ -5,7 +5,14 @@ from lumen.domain.exceptions import QuoteAuthorInvalidError
 
 @dataclass(slots=True, frozen=True)
 class Author:
-    """Represents the author of the quote."""
+    """Represents the author of the quote.
+
+    Attributes:
+        value: The validated author name.
+
+    Raises:
+        QuoteAuthorInvalidError: If the author name is invalid.
+    """
 
     value: str
 

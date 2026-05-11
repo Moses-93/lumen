@@ -10,26 +10,26 @@ class Session(Protocol):
     """
 
     def commit(self) -> None:
-        """
-        Persists all staged changes to the underlying storage.
+        """Persists all staged changes to the underlying storage.
 
-        :raises PersistenceError: If the commit operation fails.
+        Raises:
+            PersistenceError: If the commit operation fails.
         """
         ...
 
     def rollback(self) -> None:
-        """
-        Reverts all staged changes in the current session.
+        """Reverts all staged changes in the current session.
 
-        :raises PersistenceError: If the rollback operation fails.
+        Raises:
+            PersistenceError: If the rollback operation fails.
         """
         ...
 
     def close(self) -> None:
-        """
-        Closes the session and releases associated resources.
+        """Closes the session and releases associated resources.
 
-        :raises PersistenceError: If the close operation fails.
+        Raises:
+            PersistenceError: If the close operation fails.
         """
         ...
 
@@ -48,13 +48,13 @@ class Transaction(Protocol):
         exc_tb: TracebackType | None,
         /,
     ) -> None:
-        """
-        Finalize the transaction.
+        """Finalizes the transaction.
 
         If an exception was raised within the context, the transaction is rolled back.
         Otherwise, staged changes are committed to the storage.
 
-        :raises PersistenceError: If the commit or rollback operation fails.
+        Raises:
+            PersistenceError: If the commit or rollback operation fails.
         """
         ...
 
@@ -65,28 +65,33 @@ class UnitOfWork(Protocol):
     """
 
     @property
-    def notes(self) -> NoteRepository: ...
+    def notes(self) -> NoteRepository:
+        """Provides access to the note repository."""
+        ...
 
     @property
-    def quotes(self) -> QuoteRepository: ...
+    def quotes(self) -> QuoteRepository:
+        """Provides access to the quote repository."""
+        ...
 
     def transaction(self) -> Transaction:
-        """
-        Provides an atomic boundary for persistence operations.
+        """Provides an atomic boundary for persistence operations.
+
+        Returns:
+            A transaction context manager.
         """
         ...
 
     def save(self) -> None:
         """Persists all modifications made during the current work scope.
 
-        Must be called inside a :meth:`transaction` context.
-        Calling outside of it is a silent no-op — changes will be lost.
+        Must be called inside a transaction context. Calling outside of it
+        is a silent no-op.
 
-        Example::
-
+        Example:
             with uow.transaction():
-                uow.quotes.save(quote)
-                uow.save()  # commits all changes atomically
+                uow.quotes.save(quote, embedding)
+                uow.save()
         """
         ...
 

@@ -13,6 +13,11 @@ class SeedQuoteCommand(BaseModel):
     tags: list[str] = Field(default_factory=list)
 
     def to_entity(self) -> Quote:
+        """Converts command data to a Quote domain entity.
+
+        Returns:
+            A new Quote entity instance.
+        """
         return Quote.new(
             author=self.author,
             domain=self.domain,

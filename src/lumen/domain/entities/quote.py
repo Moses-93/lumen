@@ -9,6 +9,19 @@ from lumen.domain.value_objects import Author, QuoteText
 
 @dataclass(slots=True)
 class Quote:
+    """Represents a quote entity.
+
+    Attributes:
+        author: The author of the quote.
+        text: The text content of the quote.
+        domain: The field to which the quote pertains.
+        source: The source of the quote.
+        tags: A list of keywords associated with the quote.
+        created_at: The timestamp when the quote was created.
+        updated_at: The timestamp when the quote was last updated.
+        id: The unique identifier of the quote.
+    """
+
     author: Author
     text: QuoteText
     domain: str | None

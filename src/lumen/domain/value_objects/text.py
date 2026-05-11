@@ -5,7 +5,14 @@ from lumen.domain.exceptions import QuoteTextInvalidError
 
 @dataclass(slots=True, frozen=True)
 class QuoteText:
-    """Represents the content of a quote."""
+    """Represents the validated text content of a quote.
+
+    Attributes:
+        value: The validated quote text.
+
+    Raises:
+        QuoteTextInvalidError: If the text length is outside [10, 2000].
+    """
 
     value: str
 

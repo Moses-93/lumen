@@ -8,6 +8,8 @@ from lumen.domain.entities import Quote
 
 
 class SeedQuotesInteractor:
+    """Handles bulk seeding of quotes."""
+
     def __init__(
         self,
         embedder: Embedder,
@@ -19,7 +21,15 @@ class SeedQuotesInteractor:
     def execute(
         self, commands: Iterable[SeedQuoteCommand], batch_size: int = 64
     ) -> Iterable[Result[int]]:
-        """Executes the seed quotes command."""
+        """Seeds quotes in batches.
+
+        Args:
+            commands: Collection of seeding commands.
+            batch_size: Processing batch size.
+
+        Yields:
+            Progress results with total count of seeded quotes.
+        """
         total_count = 0
         for chunk in batched(commands, batch_size):
             quotes = [cmd.to_entity() for cmd in chunk]
@@ -46,6 +56,8 @@ class SeedQuotesInteractor:
 
 
 class FindQuotesInteractor:
+    """Orchestrates semantic search for quotes based on query similarity."""
+
     def __init__(self, embedder: Embedder, uow: UnitOfWork) -> None:
         self._embedder = embedder
         self._uow = uow
@@ -53,7 +65,16 @@ class FindQuotesInteractor:
     def execute(
         self, query: str, limit: int = 1, threshold: float = 0.28
     ) -> Result[list[Quote]]:
-        """Executes the find quotes by semantic query."""
+        """Finds quotes semantically resonant with the provided query.
+
+        Args:
+            query: Semantic search query string.
+            limit: Maximum number of quotes to retrieve.
+            threshold: Minimum similarity threshold.
+
+        Returns:
+            Collection of quotes ordered by semantic similarity.
+        """
         query_embedding = self._embedder.embed(query)
         quotes = self._uow.quotes.find_similar(
             query_embedding, limit=limit, threshold=threshold

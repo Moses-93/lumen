@@ -5,6 +5,8 @@ from lumen.application.enums import AppError
 
 @dataclass(frozen=True, slots=True)
 class Success[T]:
+    """Result object representing a successful operation."""
+
     data: T
 
     def __bool__(self) -> bool:
@@ -13,6 +15,8 @@ class Success[T]:
 
 @dataclass(frozen=True, slots=True)
 class Failure:
+    """Result object representing a failed operation."""
+
     error: str | AppError
     message: str
 
