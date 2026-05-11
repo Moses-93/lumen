@@ -1,6 +1,6 @@
-from .result import Success, Failure, Result
+from .note import AddNoteCommand, FindSimilarNotesQuery, GetNotesQuery
 from .quote import SeedQuoteCommand
-from .note import AddNoteCommand, GetNotesQuery, FindSimilarNotesQuery
+from .result import Failure, Result, Success
 
 __all__ = [
     "Success",

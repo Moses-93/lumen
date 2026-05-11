@@ -1,8 +1,8 @@
 from .quote import (
     QuoteAuthorInvalidError,
+    QuoteError,
     QuoteNotFoundError,
     QuoteTextInvalidError,
-    QuoteError,
 )
 
 __all__ = [

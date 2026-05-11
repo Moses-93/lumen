@@ -1,14 +1,14 @@
 from datetime import datetime
 from uuid import UUID
 
-from sqlalchemy import select, delete
+from sqlalchemy import delete, select
 from sqlalchemy.orm import Session
 
-from lumen.domain.repositories import NoteRepository
 from lumen.domain.entities.note import Note
+from lumen.domain.repositories import NoteRepository
 from lumen.infrastructure.persistence.postgres.models.note import (
-    NoteModel,
     NoteEmbeddingModel,
+    NoteModel,
 )
 
 

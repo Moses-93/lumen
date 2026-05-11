@@ -2,13 +2,13 @@ from .base import ApplicationError
 
 
 class PersistenceError(ApplicationError):
-    """Base exception for all persistent storage (database, cache, queues) related errors."""
+    """Base exception for all persistent storage errors."""
 
     pass
 
 
 class PersistenceConfigurationError(PersistenceError):
-    """Raised when persistence layer configuration is invalid (e.g., missing driver, malformed URL)."""
+    """Raised when persistence layer configuration is invalid."""
 
     def __init__(self, details: str) -> None:
         super().__init__(f"Persistence configuration error. Details: {details}")

@@ -2,9 +2,7 @@ from enum import StrEnum, auto
 
 
 class AppError(StrEnum):
-    """
-    Enumeration of application-level error types for Result objects.
-    """
+    """Enumeration of application-level error types for Result objects."""
 
     NOT_FOUND = auto()
     CONFLICT = auto()

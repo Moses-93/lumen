@@ -1,8 +1,8 @@
-from dishka import Provider, provide, Scope  # type: ignore
+from dishka import Provider, Scope, provide  # type: ignore
 from ollama import Client
 
-from lumen.config import Settings
 from lumen.application.interfaces import LlmClient
+from lumen.config import Settings
 from lumen.infrastructure.llms.ollama_client import OllamaLlmClient
 
 

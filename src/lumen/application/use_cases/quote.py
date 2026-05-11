@@ -1,9 +1,9 @@
+from collections.abc import Iterable
 from itertools import batched
-from typing import Iterable
 
-from lumen.application.dtos import Success, Failure, Result, SeedQuoteCommand
-from lumen.application.interfaces import Embedder, UnitOfWork
+from lumen.application.dtos import Failure, Result, SeedQuoteCommand, Success
 from lumen.application.enums import AppError
+from lumen.application.interfaces import Embedder, UnitOfWork
 from lumen.domain.entities import Quote
 
 
@@ -39,7 +39,9 @@ class SeedQuotesInteractor:
             )
 
             with self._uow.transaction():
-                if not self._uow.quotes.save_many(list(zip(quotes, embeddings))):
+                if not self._uow.quotes.save_many(
+                    list(zip(quotes, embeddings, strict=True))
+                ):
                     return Failure(AppError.INTERNAL_ERROR, "Failed to save batch")
                 self._uow.save()
 

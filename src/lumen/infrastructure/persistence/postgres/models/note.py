@@ -4,7 +4,7 @@ import uuid
 from datetime import datetime
 
 from pgvector.sqlalchemy import Vector  # type: ignore
-from sqlalchemy import String, ForeignKey, DateTime, ARRAY, Index, func
+from sqlalchemy import ARRAY, DateTime, ForeignKey, Index, String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from lumen.domain.entities import Note
@@ -23,7 +23,7 @@ class NoteModel(BaseModel):
         server_default=func.now(),
     )
 
-    embedding: Mapped["NoteEmbeddingModel"] = relationship(
+    embedding: Mapped[NoteEmbeddingModel] = relationship(
         back_populates="note", uselist=False, cascade="all, delete-orphan"
     )
 
@@ -59,7 +59,7 @@ class NoteEmbeddingModel(BaseModel):
         server_default=func.now(),
     )
 
-    note: Mapped["NoteModel"] = relationship(back_populates="embedding")
+    note: Mapped[NoteModel] = relationship(back_populates="embedding")
 
     __table_args__ = (
         Index(

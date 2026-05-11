@@ -1,10 +1,10 @@
-from dishka import Provider, provide, Scope, FromComponent  # type: ignore[attr-defined]
+from typing import Annotated, Literal
 
-from typing import Literal, Annotated
+from dishka import FromComponent, Provider, Scope, provide  # type: ignore[attr-defined]
 
 from lumen.application.interfaces import Embedder
-from lumen.infrastructure.embeddings import FastembedEmbedder
 from lumen.config import Settings
+from lumen.infrastructure.embeddings import FastembedEmbedder
 
 
 class EmbedderProvider(Provider):

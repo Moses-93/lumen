@@ -1,12 +1,13 @@
 from uuid import UUID
-from sqlalchemy import select, delete
+
+from sqlalchemy import delete, select
 from sqlalchemy.orm import Session
 
 from lumen.domain.entities import Quote
 from lumen.domain.repositories import QuoteRepository
 from lumen.infrastructure.persistence.postgres.models import (
-    QuoteModel,
     QuoteEmbeddingModel,
+    QuoteModel,
 )
 
 

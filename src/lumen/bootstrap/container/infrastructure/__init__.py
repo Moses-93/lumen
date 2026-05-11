@@ -1,8 +1,8 @@
 from dishka import Provider
 
 from .embedding import EmbedderProvider
-from .persistence import PostgresProvider, RepositoryProvider
 from .llm import LlmProvider
+from .persistence import PostgresProvider, RepositoryProvider
 
 
 def infrastructure_providers() -> list[Provider]:

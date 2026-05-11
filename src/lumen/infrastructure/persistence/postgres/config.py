@@ -1,11 +1,11 @@
-from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy import Engine, create_engine, text
 from sqlalchemy.exc import (
-    ProgrammingError,
-    OperationalError,
     ArgumentError,
     NoSuchModuleError,
+    OperationalError,
+    ProgrammingError,
 )
+from sqlalchemy.orm import Session, sessionmaker
 
 from lumen.application.exceptions.persistence import (
     PersistenceConfigurationError,
@@ -38,5 +38,5 @@ def enable_pgvector(engine: Engine) -> None:
             conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
     except (ProgrammingError, OperationalError) as error:
         raise PersistenceOperationalError(
-            "Failed to enable pgvector extension. Ensure 'pgvector' is installed on the PostgreSQL server and the user has sufficient privileges."
+            "Failed to enable pgvector extension."
         ) from error

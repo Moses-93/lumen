@@ -1,14 +1,14 @@
-from dishka import provide, Provider, Scope, FromComponent  # type: ignore
-
 from typing import Annotated
+
+from dishka import FromComponent, Provider, Scope, provide  # type: ignore
 
 from lumen.application.interfaces import Embedder, UnitOfWork
 from lumen.application.use_cases import (
-    SeedQuotesInteractor,
-    FindQuotesInteractor,
     AddNoteInteractor,
-    GetNotesInteractor,
+    FindQuotesInteractor,
     FindSimilarNotesInteractor,
+    GetNotesInteractor,
+    SeedQuotesInteractor,
 )
 
 

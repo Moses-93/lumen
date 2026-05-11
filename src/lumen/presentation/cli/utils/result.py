@@ -1,7 +1,9 @@
-from typing import Callable, Any, NoReturn
+from collections.abc import Callable
+from typing import Any, NoReturn
+
 import click
 
-from lumen.application.dtos import Result, Failure, Success
+from lumen.application.dtos import Failure, Result, Success
 from lumen.application.enums import AppError
 
 

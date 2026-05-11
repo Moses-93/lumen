@@ -6,13 +6,13 @@ from dishka.integrations.click import inject
 
 from lumen.application.dtos import (
     AddNoteCommand,
-    GetNotesQuery,
     FindSimilarNotesQuery,
+    GetNotesQuery,
 )
 from lumen.application.use_cases import (
     AddNoteInteractor,
-    GetNotesInteractor,
     FindSimilarNotesInteractor,
+    GetNotesInteractor,
 )
 from lumen.presentation.cli.utils import handle_failure, process_result, void
 

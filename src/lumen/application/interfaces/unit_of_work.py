@@ -1,13 +1,11 @@
-from typing import Protocol, Self
 from types import TracebackType
+from typing import Protocol, Self
 
-from lumen.domain.repositories import QuoteRepository, NoteRepository
+from lumen.domain.repositories import NoteRepository, QuoteRepository
 
 
 class Session(Protocol):
-    """
-    Provides a gateway for managing the lifecycle of persistence operations.
-    """
+    """Provides a gateway for managing the lifecycle of persistence operations."""
 
     def commit(self) -> None:
         """Persists all staged changes to the underlying storage.
@@ -35,9 +33,7 @@ class Session(Protocol):
 
 
 class Transaction(Protocol):
-    """
-    Represents an atomic boundary for persistence operations.
-    """
+    """Represents an atomic boundary for persistence operations."""
 
     def __enter__(self) -> Self: ...
 
@@ -60,9 +56,7 @@ class Transaction(Protocol):
 
 
 class UnitOfWork(Protocol):
-    """
-    Orchestrates the lifecycle of repositories and underlying persistence sessions.
-    """
+    """Coordinates repositories and underlying persistence sessions."""
 
     @property
     def notes(self) -> NoteRepository:
@@ -103,7 +97,5 @@ class UnitOfWork(Protocol):
         exc_val: BaseException | None,
         exc_tb: TracebackType | None,
     ) -> None:
-        """
-        Finalizes the unit of work and releases underlying resources.
-        """
+        """Finalizes the unit of work and releases underlying resources."""
         ...

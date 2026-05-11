@@ -5,19 +5,19 @@ from pathlib import Path
 import click
 from dishka import FromDishka
 from dishka.integrations.click import inject
-
-from lumen.application.dtos import SeedQuoteCommand
-from lumen.application.use_cases import SeedQuotesInteractor, FindQuotesInteractor
 from rich.console import Console
 from rich.progress import (
+    BarColumn,
+    MofNCompleteColumn,
     Progress,
     SpinnerColumn,
-    TextColumn,
-    BarColumn,
     TaskProgressColumn,
+    TextColumn,
     TimeElapsedColumn,
-    MofNCompleteColumn,
 )
+
+from lumen.application.dtos import SeedQuoteCommand
+from lumen.application.use_cases import FindQuotesInteractor, SeedQuotesInteractor
 from lumen.presentation.cli.utils.result import handle_failure, process_result, void
 
 

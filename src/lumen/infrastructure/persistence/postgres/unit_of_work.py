@@ -1,4 +1,5 @@
 from typing import Any, Self
+
 from sqlalchemy.orm import Session
 
 from lumen.application.interfaces import Transaction

@@ -1,10 +1,10 @@
 from ollama import Client, ResponseError
 
 from lumen.application.exceptions import (
-    LlmConnectionError,
-    LlmResponseError,
-    LlmModelNotFoundError,
     LlmAuthenticationError,
+    LlmConnectionError,
+    LlmModelNotFoundError,
+    LlmResponseError,
 )
 
 

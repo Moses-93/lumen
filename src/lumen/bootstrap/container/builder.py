@@ -1,9 +1,9 @@
-from dishka import Container, Provider, Scope, provide, make_container  # type: ignore
+from dishka import Container, Provider, Scope, make_container, provide  # type: ignore
 
 from lumen.config import Settings
 
-from .infrastructure import infrastructure_providers
 from .application import application_providers
+from .infrastructure import infrastructure_providers
 
 
 class SettingsProvider(Provider):

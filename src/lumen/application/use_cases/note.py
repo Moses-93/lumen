@@ -1,9 +1,9 @@
 from lumen.application.dtos import (
-    Success,
-    Result,
     AddNoteCommand,
-    GetNotesQuery,
     FindSimilarNotesQuery,
+    GetNotesQuery,
+    Result,
+    Success,
 )
 from lumen.application.interfaces import Embedder, UnitOfWork
 from lumen.domain.entities import Note, Quote

@@ -1,32 +1,31 @@
+from .embedding import (
+    EmbeddingError,
+    EmbeddingInferenceError,
+    EmbeddingInitializationError,
+)
+from .llm import (
+    LlmAuthenticationError,
+    LlmConfigurationError,
+    LlmConnectionError,
+    LlmError,
+    LlmModelNotFoundError,
+    LlmOperationalError,
+    LlmResponseError,
+    LlmTimeoutError,
+    LlmTokenLimitError,
+)
 from .persistence import (
-    PersistenceConfigurationError,
     PersistenceAuthError,
+    PersistenceConfigurationError,
     PersistenceConnectionError,
     PersistenceConstraintError,
+    PersistenceError,
     PersistenceInvalidDataError,
     PersistenceOperationalError,
     PersistenceQueryError,
     PersistenceReplyError,
     PersistenceTimeoutError,
-    PersistenceError,
 )
-from .llm import (
-    LlmConfigurationError,
-    LlmAuthenticationError,
-    LlmConnectionError,
-    LlmResponseError,
-    LlmTimeoutError,
-    LlmTokenLimitError,
-    LlmOperationalError,
-    LlmModelNotFoundError,
-    LlmError,
-)
-from .embedding import (
-    EmbeddingInitializationError,
-    EmbeddingInferenceError,
-    EmbeddingError,
-)
-
 
 __all__ = [
     "PersistenceConfigurationError",

@@ -1,5 +1,5 @@
-from .note import NoteModel, NoteEmbeddingModel
-from .quote import QuoteModel, QuoteEmbeddingModel
+from .note import NoteEmbeddingModel, NoteModel
+from .quote import QuoteEmbeddingModel, QuoteModel
 
 __all__ = [
     "NoteEmbeddingModel",

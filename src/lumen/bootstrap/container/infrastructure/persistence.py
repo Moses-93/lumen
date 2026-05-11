@@ -1,25 +1,25 @@
-from typing import Iterable
+from collections.abc import Iterable
 
 from dishka import Provider, Scope, provide  # type: ignore
 from sqlalchemy import Engine
 from sqlalchemy.orm import Session, sessionmaker
 
+from lumen.application.interfaces.unit_of_work import UnitOfWork
 from lumen.config import Settings
 from lumen.domain.repositories import (
-    QuoteRepository,
     NoteRepository,
+    QuoteRepository,
+)
+from lumen.infrastructure.persistence.postgres.config import (
+    enable_pgvector,
+    init_engine,
+    init_sessionmaker,
 )
 from lumen.infrastructure.persistence.postgres.repositories import (
     PostgresNoteRepository,
     PostgresQuoteRepository,
 )
-from lumen.application.interfaces.unit_of_work import UnitOfWork
 from lumen.infrastructure.persistence.postgres.unit_of_work import PostgresUnitOfWork
-from lumen.infrastructure.persistence.postgres.config import (
-    init_engine,
-    enable_pgvector,
-    init_sessionmaker,
-)
 
 
 class PostgresProvider(Provider):

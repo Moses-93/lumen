@@ -1,11 +1,12 @@
-from fastembed import TextEmbedding
-from typing import Iterable
-from pathlib import Path
 import warnings
+from collections.abc import Iterable
+from pathlib import Path
+
+from fastembed import TextEmbedding
 
 from lumen.application.exceptions import (
-    EmbeddingInitializationError,
     EmbeddingInferenceError,
+    EmbeddingInitializationError,
 )
 
 

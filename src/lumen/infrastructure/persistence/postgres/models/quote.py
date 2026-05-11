@@ -4,7 +4,7 @@ import uuid
 from datetime import datetime
 
 from pgvector.sqlalchemy import Vector  # type: ignore
-from sqlalchemy import String, Text, ARRAY, ForeignKey, DateTime, Index, func
+from sqlalchemy import ARRAY, DateTime, ForeignKey, Index, String, Text, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from lumen.domain.entities import Quote
@@ -32,7 +32,7 @@ class QuoteModel(BaseModel):
         onupdate=func.now(),
     )
 
-    embedding: Mapped["QuoteEmbeddingModel"] = relationship(
+    embedding: Mapped[QuoteEmbeddingModel] = relationship(
         back_populates="quote", uselist=False, cascade="all, delete-orphan"
     )
 
@@ -76,7 +76,7 @@ class QuoteEmbeddingModel(BaseModel):
         server_default=func.now(),
     )
 
-    quote: Mapped["QuoteModel"] = relationship(back_populates="embedding")
+    quote: Mapped[QuoteModel] = relationship(back_populates="embedding")
 
     __table_args__ = (
         Index(
