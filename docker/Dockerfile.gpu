@@ -1,0 +1,51 @@
+FROM nvidia/cuda:12.4.1-cudnn-runtime-ubuntu22.04 AS base
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    PYTHONUNBUFFERED=1 \
+    PYTHONPATH=/app/src \
+    LD_LIBRARY_PATH=/usr/local/cuda-12.4/targets/x86_64-linux/lib:/usr/local/cuda/lib64:/usr/local/cuda-12.4/lib64:/usr/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH}
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    bash \
+    libpq5 \
+    curl \
+    ca-certificates \
+    software-properties-common \
+    && add-apt-repository ppa:deadsnakes/ppa \
+    && apt-get update && apt-get install -y --no-install-recommends \
+    python3.12 \
+    && rm -rf /var/lib/apt/lists/*
+
+FROM base AS builder
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    libpq-dev \
+    python3.12-dev \
+    python3.12-venv \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN ln -s /usr/bin/python3.12 /usr/local/bin/python
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+ENV UV_PROJECT_ENVIRONMENT=/usr/local/ \
+    UV_PYTHON=/usr/local/bin/python
+
+WORKDIR /app
+
+COPY pyproject.toml uv.lock README.md ./
+COPY src ./src
+RUN uv sync --extra gpu --no-dev
+
+FROM base AS production
+
+RUN groupadd -r lumen && useradd -r -g lumen -m -s /sbin/nologin lumen
+
+WORKDIR /app
+
+COPY --from=builder /usr/local /usr/local
+
+COPY . .
+RUN chown -R lumen:lumen /app
+
+USER lumen

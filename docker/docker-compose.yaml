@@ -1,0 +1,104 @@
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?POSTGRES_USER is required}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+      POSTGRES_DB: ${POSTGRES_DB:?POSTGRES_DB is required}
+    volumes:
+      - postgres_data_prod:/var/lib/postgresql/data
+    env_file:
+      - ../.env
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 2G
+    networks:
+      - lumen-network
+
+  cli-cpu:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      target: production
+    profiles: [cpu]
+    restart: unless-stopped
+    user: "${USER_ID}:${GROUP_ID}"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - ../.env
+    environment:
+      POSTGRES_HOST: db
+      HF_TOKEN: ${HF_TOKEN}
+    volumes:
+      - ${EMBEDDING_CACHE_DIR}:${EMBEDDING_CACHE_DIR}
+    networks:
+      - lumen-network
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 6G
+    command: tail -f /dev/null
+
+  cli-gpu:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.gpu
+      target: production
+    profiles: [gpu]
+    restart: unless-stopped
+    user: "${USER_ID}:${GROUP_ID}"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - ../.env
+    environment:
+      POSTGRES_HOST: db
+      HF_TOKEN: ${HF_TOKEN}
+    volumes:
+      - ${EMBEDDING_CACHE_DIR}:${EMBEDDING_CACHE_DIR}
+    networks:
+      - lumen-network
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+        limits:
+          memory: 8G
+    command: tail -f /dev/null
+
+networks:
+  lumen-network:
+    driver: bridge
+
+volumes:
+  postgres_data_prod:
