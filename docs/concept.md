@@ -20,6 +20,12 @@ A core position: the system does not interpret or draw conclusions on behalf of 
 
 **Tool, not conclusion.** Pattern analysis, temporal dynamics, semantically similar states — all of this is presented as material for reflection, not as a ready-made answer.
 
+## Daily Interaction
+
+**Daily Evaluation of the Day (Retention Hook):**
+As a conceptual direction for user retention, the system may introduce a daily subjective evaluation of the *entire day* (e.g., on a scale of 1 to 10: "How do you feel today?").
+This evaluation acts as a psychological bridge: it motivates the user to reflect on their day, and upon engaging, the app invites them to leave a detailed textual entry (a thought or event) to capture that state.
+
 ## Mechanics
 
 Each entry is vectorized and stored with a timestamp. In parallel, a quote library exists — also vectorized. With each new entry, the system finds a semantically close quote and returns it to the user.
