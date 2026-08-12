@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "skills": {
+    "apple-design": {
+      "source": "emilkowalski/skills",
+      "sourceType": "github",
+      "skillPath": "skills/apple-design/SKILL.md",
+      "computedHash": "8b94db67cb9edaad5f1501010804caa610131f1d2dfda0a27664b2e858deade3"
+    },
+    "find-skills": {
+      "source": "vercel-labs/skills",
+      "sourceType": "github",
+      "skillPath": "skills/find-skills/SKILL.md",
+      "computedHash": "b146008599c31057cef1c145774cea5d5afb30e8f43fa802e47a4b461419aaaf"
+    },
+    "frontend-design": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "skillPath": "skills/frontend-design/SKILL.md",
+      "computedHash": "4eabc66183767153e404b39d1b839b1c37f2d82d86f0a0d7e880a579d8d62336"
+    },
+    "legal-risk-assessment": {
+      "source": "anthropics/knowledge-work-plugins",
+      "sourceType": "github",
+      "skillPath": "legal/skills/legal-risk-assessment/SKILL.md",
+      "computedHash": "fbc4dffe38a8b8d59ccee1d016654497dc1d9f2f4ceb5ca632dcb4715d22c07f"
+    },
+    "marketing-psychology": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "skillPath": "skills/marketing-psychology/SKILL.md",
+      "computedHash": "50d735eb0f5c36f379ed2200f21aeacc9b9ad85667b5d33ec6111857352a1340"
+    },
+    "product-marketing": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "skillPath": "skills/product-marketing/SKILL.md",
+      "computedHash": "b8a9cd747705923a7a29cda12e478594e3a5062d8f7c7bfbf19d7fc0b24cee76"
+    },
+    "react-native-executorch": {
+      "source": "software-mansion/react-native-executorch",
+      "sourceType": "github",
+      "skillPath": "skills/react-native-executorch/SKILL.md",
+      "computedHash": "4ce3c8769e15c49a1c23566f34ebf99f7df2d7f1b100d704c87eecf33509b6ce"
+    },
+    "vercel-react-best-practices": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/react-best-practices/SKILL.md",
+      "computedHash": "ca7b0c0c6e5f2750043f7f0cd72d16ac4e2abc48f9b5500d047a4b77a2506212"
+    },
+    "vercel-react-native-skills": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/react-native-skills/SKILL.md",
+      "computedHash": "41d24eafa7c3d82e270439808f7cfbc4d51aeb2d14f2809a2267c16275784d06"
+    }
+  }
+}
